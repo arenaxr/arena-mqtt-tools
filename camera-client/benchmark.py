@@ -125,11 +125,11 @@ class Benchmark(object):
     def get_dropped_clients(self):
         return self.dropped_clients
 
-def main(num_cams, timeout, broker, port, broker2, port2, name):
+def main(num_cams, timeout, broker, port, broker2, port2, name, scene):
     print()
     print(f"----- Running benchmark with {num_cams} clients -----")
 
-    test = Benchmark(f"{name}_c{num_cams}", num_cams, timeout*60, (broker, broker2), (port, port2), "benchmark_"+rand_str(5))
+    test = Benchmark(f"{name}_c{num_cams}", num_cams, timeout*60, (broker, broker2), (port, port2), scene)
     test.run()
 
     dropped_clients = test.get_dropped_clients()
@@ -159,6 +159,8 @@ if __name__ == "__main__":
                         default=18884)
     parser.add_argument("-n", "--name", type=str, help="Optional name for saved plot",
                         default="benchmark")
+    parser.add_argument("-s", "--scene", type=str, help="Scene name",
+                        default="benchmark_"+rand_str(5))
     parser.add_argument("-t", "--timeout", type=float, help="Amount of mins to wait before ending data collection",
                         default=2.0) # default is 2 mins
 
