@@ -6,10 +6,12 @@ Assumes brokers are run in one node and clients (test python scripts) on another
 
 ## Broker config
 
-On the host running the brokers, clone this repo and, from `sec-performance/server-config` start the two brokers using the compose file:
+On the host running the brokers, clone this repo and, from `sec-performance/server-config` and copy the `server-config` folder (see note below). Start the two brokers using the compose file:
 ```
 docker-compose up
 ```
+
+**Note:**: the config uses the certificate files from an arena deployment and assumes that `../arena-services-docker` exists, so you need to copy the `server-config` folder to a folder with the same parent as `arena-services-docker`. A test deployment is at **arena0**, folder `~/mosquitto-broker-test`.
 
 The compose file starts two brokers. One configured with security and another with no security. The broker is a modified mosquitto (`conixcenter/arena-broker-test`) that ouputs log messages of `handle_connection`, `handle_subscription`, and `handle_publish` timming.
 
