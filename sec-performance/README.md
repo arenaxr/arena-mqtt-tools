@@ -29,7 +29,7 @@ We save the messages sent to `$SYS/broker/log/N` for later processing with an he
 start_log_server_time.sh
 ```
 This script starts a `mosquitto_sub` client using the config (mqtt user, password, host, port) in **secrets.env**.
-**Note**: create secrets.env from the example before starting logging. The logs are saved to a folder **logs** which needs to be created too.
+**Note**: create `secrets.env` from the example before starting logging. The logs are saved to a folder **logs**.
 
 ### Start tests
 
@@ -40,6 +40,6 @@ start_mqtt_test.sh
 
 ## Parsing the logs
 
-The logs are parsed using the jupyter notebook in `analize-logs.ipynb`. Update the notebook to use the latest log file.
+The logs are parsed using the jupyter notebook in `analize-logs.ipynb`. Update the notebook to use the latest log files.
 
 

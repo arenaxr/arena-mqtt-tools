@@ -4,6 +4,8 @@ source secrets.env
 
 LOG_FILE_DATE=$(date +%F_%T| tr ':' '_')
 
+mkdir -p logs
+
 LOG_FILE_SEC="logs/server_time_${LOG_FILE_DATE}_sec.log"
 LOG_FILE_NOSEC="logs/server_time_${LOG_FILE_DATE}_nosec.log"
 
