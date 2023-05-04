@@ -6,7 +6,7 @@ Assumes brokers are run in one node and clients (test python scripts) on another
 
 ## Broker config
 
-On the host running the brokers, clone this repo and, from `sec-performance/server-config` and copy the `server-config` folder (see note below). Start the two brokers using the compose file:
+On the host running the brokers, clone this repo and copy the `sec-performance/server-config` folder (see note below). Start the two brokers using the compose file:
 ```
 docker-compose up
 ```
