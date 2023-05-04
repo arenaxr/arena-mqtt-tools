@@ -123,6 +123,7 @@ def main():
     mqttc = mqtt.Client(f'mqtt-test-{str(uuid.uuid4())}', clean_session=True)
     mqttc.on_connect = on_connect
     port=21883
+    creds={}
     if not args.nosec:
         creds = generate_token(username, './keys/jwt.priv-arena0.pem', sub_topics=subs, pub_topics=pubs)
         #creds = generate_token(username, './keys/jwt.priv-arena0.pem')
@@ -131,7 +132,7 @@ def main():
         mqttc.tls_set(certifi.where())
         #mqttc.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS, ciphers=None)
         mqttc.tls_insecure_set(True)
-    print(f"Connecting: arena0.andrew.cmu.edu:{port}\nuser:{creds['username']}\npass:{creds['token']}")
+    print(f"Connecting: arena0.andrew.cmu.edu:{port}\n{creds}")
     mqttc.connect("arena0.andrew.cmu.edu", port)
     mqttc.loop_start()
 
