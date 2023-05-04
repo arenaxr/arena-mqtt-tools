@@ -1,7 +1,10 @@
 arena_sub.py: venv
 	$(VENV)/python $@ $(ARGS)
 
-mqtt-auth-tester.py: venv
+gen-root-jwt.py: venv
+	$(VENV)/python $@ $(ARGS)
+
+mqtt-tester.py: venv
 	$(VENV)/python $@ $(ARGS)
 
 signout: venv

@@ -9,6 +9,9 @@ import logging
 import time
 import uuid
 import random
+import threading
+import certifi
+import ssl
 
 # config number of topics generated (range [min, max])
 min_topics=10
@@ -29,6 +32,8 @@ max_n_sub=2000
 
 # config probablity that topics used for pub/sub are not in the allowed list
 not_in_list_prob=0
+
+connected = threading.Event()
 
 def random_subtopic(min_str_len, max_str_len, plus_probability):
     if np.random.binomial(n=1, p=plus_probability): return '+' # insert a '+' subtopic with plus_probability
@@ -76,19 +81,28 @@ def generate_token(username, keypath, sub_topics=['#'], pub_topics=['#']):
         "token": token
     }
 
+
 def on_connect(mqttc, obj, flags, rc):
+    global connected
     if not rc==0:
         printf("Error Connecting")
         exit()
 
+    print("Connected.")
+    connected.set()
+   
 def main():
+    global connected
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', action='store', dest='seed', default=None, help='PRNG seed')
     parser.add_argument('--nosec', dest='nosec', action='store_true', default=False)
+    parser.add_argument('--exit_on_conn', dest='exit_on_conn', action='store_true', default=False)
     args = parser.parse_args()
 
-    np.random.seed(int(args.seed))
-    random.seed(int(args.seed))
+    if type(args.seed) == str:
+        args.seed = int(args.seed)
+    np.random.seed(args.seed)
+    random.seed(args.seed)
 
     print('##SEED', args.seed)
 
@@ -111,11 +125,23 @@ def main():
     port=21883
     if not args.nosec:
         creds = generate_token(username, './keys/jwt.priv-arena0.pem', sub_topics=subs, pub_topics=pubs)
+        #creds = generate_token(username, './keys/jwt.priv-arena0.pem')
         mqttc.username_pw_set(username=creds['username'], password=creds['token'])
         port=18883
-    print()
+        mqttc.tls_set(certifi.where())
+        #mqttc.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS, ciphers=None)
+        mqttc.tls_insecure_set(True)
+    print(f"Connecting: arena0.andrew.cmu.edu:{port}\nuser:{creds['username']}\npass:{creds['token']}")
     mqttc.connect("arena0.andrew.cmu.edu", port)
+    mqttc.loop_start()
 
+    connected.wait()
+    
+    if args.exit_on_conn:
+        mqttc.disconnect()
+        time.sleep(.1)
+        exit()
+    
     # subscribe to some random topics; some in the subscribe list, some not
     for i in range(np.random.randint(min_n_sub, max_n_sub)):
         index=0
@@ -142,5 +168,8 @@ def main():
         mqttc.publish(topic, s)
         time.sleep(.001)
 
+    mqttc.disconnect()
+    time.sleep(.1)
+    
 if __name__ == "__main__":
     main()
