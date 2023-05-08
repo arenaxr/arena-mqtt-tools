@@ -13,7 +13,7 @@ docker-compose up
 
 **Note:**: the config uses the certificate files from an arena deployment and assumes that `../arena-services-docker` exists, so you need to copy the `server-config` folder to a folder with the same parent as `arena-services-docker`. A test deployment is at **arena0**, folder `~/mosquitto-broker-test`.
 
-The compose file starts two brokers. One configured with security and another with no security. The broker is a modified mosquitto (`conixcenter/arena-broker-test`) that ouputs log messages of `handle_connection`, `handle_subscription`, and `handle_publish` timming.
+The compose file starts two brokers. One configured with security and another with no security. The broker is a modified mosquitto (`conixcenter/arena-broker-test`, [source](https://github.com/SilverLineFramework/mosquitto-broker/tree/timing_log)) that ouputs log messages of `handle_connection`, `handle_subscription`, and `handle_publish` timming.
 
 The configuration of the brokers are in the `mosquitto-sec.conf` and `mosquitto-nosec.conf` files. The brokers are configured to send log messages (`log_type notice` and above) to a topic (config option `log_dest topic` sends log messages to `$SYS/broker/log/N`).
 
