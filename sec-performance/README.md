@@ -2,7 +2,7 @@
 
 Runs connnect, subscribe, publish tests against brokers configured with and without security.
 
-Assumes brokers are run in one node and clients (test python scripts) on another.
+Setup assumes brokers are run in one node and clients (test python scripts) on another. The brokers run a [modified mosquitto broker](https://github.com/SilverLineFramework/mosquitto-broker/tree/timing_log) that logs connect, publish and subscribe handler time.
 
 ## Broker config
 
